@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tienda</title>
+</head>
+<body>
+    <h1>Tienda ejemplo: tienes <span id="cantidad">0</span> producto(s)</h1>
+    <p>Normalmente uno no escribes el nombre y el precio pero es un ejemplo xD</p>
+    <h2>Producto</h2>
+    <label for="producto">Producto</label><br>
+    <input id="producto" type="text" placeholder="Ingresa el producto"><br>
+    <h2>Precio</h2>
+    <label for="precio">Precio</label><br>
+    <input id="precio" type="number" placeholder="Ingresa el precio"><br>
+    <button id="guardar" type="button">Guardar en canasta</button>
+    <p>click derecho -> inspeccionar -> application -> session storage --> localhost</p>
+    <p>Ahí podrás ver cómo se almacena tu sesión</p>
+
+    <h2>Tabla de productos</h2>
+    <table>
+        <thead>
+            <tr>
+                <td>Precio</td>
+                <td>Producto</td>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+
+        </tbody>
+    </table>
+    <script>
+        document.getElementById("guardar").addEventListener("click", guardar)
+        let tienda = [];
+        let sessionTienda
+        function guardar(){
+            if(sessionStorage.getItem("tienda")){
+                //Si ya hay elementos guardados los cargamos en el array tienda
+                tienda = JSON.parse(sessionStorage.getItem("tienda"));
+            }
+            if(producto.value == "" || precio.value == ""){
+                alert("Escribe vago");
+            }
+            else{
+                let array = {
+                    "precio": precio.value,
+                    "producto": producto.value
+                }
+                //Guardo la data en un array
+                tienda.push(array);
+
+            }
+            //Convierto el array en texto
+            sesionTienda = JSON.stringify(tienda);
+            //Lo guardo como session
+            sessionStorage.setItem("tienda",sesionTienda)
+            cargarTabla()
+        }
+
+        function cargarTabla(){
+            let row = ""
+            if (sessionStorage.getItem("tienda")){
+                //Convertimos la sesion que es texto en array de javascript
+                sessionTienda = JSON.parse(sessionStorage.getItem("tienda"));
+                //Puedes verlo en consola
+                for (let i = 0; i < sessionTienda.length; i++){
+                    row +="<tr><td>"+sessionTienda[i].precio+"</td><td>"+sessionTienda[i].producto+"</td></tr>";
+                }
+                tbody.innerHTML = row;
+            }
+        }
+    </script>
+</body>
+</html>
